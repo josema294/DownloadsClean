@@ -6,12 +6,11 @@ from datetime import datetime, time
 def main():
     print("Iniciando proceso")
     downloads_dir = get_dowload_dir()
-    scan_dir(downloads_dir)
-
+    deleteables = scan_dir(downloads_dir)
     if (is_working_time()):
-        delete_working_time()
+        delete_files(deleteables, True)
     else:
-        delete_No_working()
+        delete_files(deleteables, False)
 
     print("finalizado proceso")
 
@@ -36,7 +35,10 @@ def scan_dir(downloads_dir):
     rdp_list = []
     for archivo in archivos:
         if str.endswith(archivo, ".rdp"):
-            rdp_list.append(archivo)
+            rdp_list.append(os.path.join(downloads_dir, archivo))
+            print(f"Agregado archivo {archivo} a la lista de eliminables")
+
+    return rdp_list
 
 
 def is_working_time():
@@ -55,12 +57,20 @@ def is_working_time():
     return is_working_time
 
 
-def delete_working_time():
-    return None
+def delete_files(deleteables: list, working_time: bool):
 
-
-def delete_No_working():
-    return None
+    deleteables.sort(key=os.path.getmtime, reverse=True)
+    
+    if (working_time):
+        deleteables = deleteables[1:]
+    else:
+        deleteables = deleteables
+    for file in deleteables:
+        try:
+            os.remove(file)
+            print(f"Archivo eliminado: {file}")
+        except FileNotFoundError as e:
+            print(f"No se pudo eliminar {file}: {e}")
 
 
 if __name__ == "__main__":
