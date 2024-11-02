@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 import subprocess
 import os
 from datetime import datetime, time
@@ -31,6 +34,8 @@ def get_dowload_dir():
 
 
 def scan_dir(downloads_dir):
+    '''Escanea el directorio de descargas que es pasado por parametro para localizar 
+    todos los archivos que sean de formato .rdp'''
     archivos = os.listdir(downloads_dir)
     rdp_list = []
     for archivo in archivos:
@@ -58,9 +63,10 @@ def is_working_time():
 
 
 def delete_files(deleteables: list, working_time: bool):
-
+    '''Metodo que itera por los archivos a eliminar y elimina todos o todos menos el ultimo segun
+    si estamos fuera de horario laboral, o en horario laboral'''
     deleteables.sort(key=os.path.getmtime, reverse=True)
-    
+
     if (working_time):
         deleteables = deleteables[1:]
     else:
