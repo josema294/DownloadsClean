@@ -43,6 +43,8 @@ def scan_dir(downloads_dir):
             rdp_list.append(os.path.join(downloads_dir, archivo))
             print(f"Agregado archivo {archivo} a la lista de eliminables")
 
+    if (len(rdp_list)==0):
+        print("No se han encontrado archivos .rdp en la carpeta de descargas") 
     return rdp_list
 
 
