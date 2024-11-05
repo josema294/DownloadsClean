@@ -23,6 +23,17 @@ Clona este repositorio en tu máquina local:
 git clone https://github.com/tuusuario/auto-rdp-cleanup.git
 cd auto-rdp-cleanup
 ```
+Copia el script a la carpeta que de desees
+```bash
+mv auto-rdp-cleanup /ruta/de/destino
+```
+Es recomendable configurar su ejecucion peridica por ejemplo con un crontab
+
+```bash
+crontab -e
+
+0 * * * * /ruta/del/comando
+```
 
 
 🇬🇧 **ENGLISH**
@@ -49,9 +60,17 @@ Clone this repository to your local machine:
 ```bash
 git clone https://github.com/yourusername/auto-rdp-cleanup.git
 cd auto-rdp-cleanup
+```
+Copy the script to the folder you prefer:
+```bash
+mv auto-rdp-cleanup /path/to/destination
+```
+It’s recommended to set up periodic execution, for example with a cron job:
 
+```bash
+crontab -e
 
-
-
+0 * * * * /path/to/command
+```
 
 
