@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 
-
 import subprocess
 import os
-from datetime import datetime, time
+import time 
+from datetime import datetime, time as dt_time 
 
 
 def main():
     print("Iniciando proceso")
     downloads_dir = get_dowload_dir()
     deleteables = scan_dir(downloads_dir)
-    if (is_working_time()):
-        delete_files(deleteables, True)
-    else:
-        delete_files(deleteables, False)
+    
+    if(len(deleteables)==0):
+        print("finalizado proceso")
 
-    print("finalizado proceso")
+    else:
+
+        if (is_working_time()):
+            delete_files(deleteables, True)
+        else:
+            delete_files(deleteables, False)
+
+        print("finalizado proceso")
 
 
 def get_dowload_dir():
@@ -58,18 +64,24 @@ def is_working_time():
     dia_semana = ahora.weekday()
     hora = ahora.time()
 
-    if (dia_semana < 5 and (time(8, 0) <= hora <= time(18, 0))):
+    if (dia_semana < 5 and (dt_time(8, 0) <= hora <= dt_time(18, 0))):
         is_working_time = True
     
     return is_working_time
 
 
 def delete_files(deleteables: list, working_time: bool):
-    '''Metodo que itera por los archivos a eliminar y elimina todos o todos menos el ultimo segun
-    si estamos fuera de horario laboral, o en horario laboral'''
-    deleteables.sort(key=os.path.getmtime, reverse=True)
+    '''Metodo que itera por los archivos a eliminar y elimina todos o todos menos el ultimo siempre y cuando
+     tenga menos de 5m de vida segun si estamos fuera de horario laboral, o en horario laboral'''
+    
 
-    if (working_time):
+    deleteables.sort(key=os.path.getmtime, reverse=True)
+    tiempo_actual = time.time() #now
+    tiempo_acceso = os.path.getatime(deleteables[0]) #ultimo acceso archivo
+    diferencia = tiempo_actual - tiempo_acceso #Diferencia
+
+    if (working_time and diferencia<=300 ):
+        
         deleteables = deleteables[1:]
     else:
         deleteables = deleteables
